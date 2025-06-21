@@ -1,0 +1,36 @@
+#!/bin/bash
+
+DB="serpent_surge_db"
+TABLE="score"
+BACKUP_DIR="/opt/db_backups"
+ARCHIVE_DIR="$BACKUP_DIR/archives"
+LOG_FILE="/var/log/serpent-backup/backup.log"
+DATE=$(date +"%Y-%m-%d_%H-%M")
+
+case $1 in
+  db)
+    DB="$2"
+    echo "Database set to: $DB"
+    ;;
+  table)
+    TABLE="$2"
+    echo "Table set to: $TABLE"
+    ;;
+  backup)
+    mysqldump -u root -pnicat14!@ $DB $TABLE > "$BACKUP_DIR/${DB}_${TABLE}_${DATE}.sql"
+    echo "$DATE: Backup created for $DB.$TABLE" >> $LOG_FILE
+    ;;
+  archive)
+    tar czf "$ARCHIVE_DIR/${DATE}_backup.tar.gz" -C "$BACKUP_DIR" .
+    echo "$DATE: Archive created" >> $LOG_FILE
+    rm -f "$BACKUP_DIR"/*.sql
+    ls -t "$ARCHIVE_DIR"/*.tar.gz | sed -e '1,3d' | xargs -r rm --
+    ;;
+  list)
+    echo -e "Date\t\tSize"
+    ls -lh $ARCHIVE_DIR | grep '.tar.gz' | awk '{print $6, $7, $9}'
+    ;;
+  *)
+    echo "Usage: dbbackup {db <name> | table <name> | backup | archive | list}"
+    ;;
+esac
