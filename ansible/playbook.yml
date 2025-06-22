@@ -1,0 +1,31 @@
+---
+- name: Setup web server with Docker and Nginx
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - docker.io
+        - nginx
+
+    - name: Ensure Docker is running and enabled
+      systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Deploy custom Nginx config
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/sites-available/default
+        mode: '0644'
+
+    - name: Restart Nginx
+      systemd:
+        name: nginx
+        state: restarted
