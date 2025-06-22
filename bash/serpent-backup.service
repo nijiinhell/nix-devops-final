@@ -1,0 +1,11 @@
+[Unit]
+Description=Serpent Backup Service
+After=network.target mysql.service
+
+[Service]
+User=serpentsvc
+ExecStart=/bin/bash -c 'while true; do sleep 3600; done'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
