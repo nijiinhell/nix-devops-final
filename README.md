@@ -22,7 +22,9 @@ The project was pushed to a private GitHub repository, with a well-structured di
 Clone the repository:
 
 git clone https://github.com/nijiinhell/nix-devops-final.git
+
 cd nix-devops-final/docker/serpent-surge-main
+
 sudo docker-compose up --build 
 
 
