@@ -7,30 +7,40 @@ ARCHIVE_DIR="$BACKUP_DIR/archives"
 LOG_FILE="/var/log/serpent-backup/backup.log"
 DATE=$(date +"%Y-%m-%d_%H-%M")
 
+# Main case block to handle different operations
 case $1 in
-  db)
-    DB="$2"
-    echo "Database set to: $DB"
+  db) 
+    DB="$2"  # Set the database if provided
+    echo "Using database: $DB"
     ;;
   table)
-    TABLE="$2"
-    echo "Table set to: $TABLE"
+    TABLE="$2"  # Set the table if provided
+    echo "Using table: $TABLE"
     ;;
   backup)
+    # Create a backup using mysqldump for the specified database and table
     mysqldump -u root -pnicat14!@ $DB $TABLE > "$BACKUP_DIR/${DB}_${TABLE}_${DATE}.sql"
-    echo "$DATE: Backup created for $DB.$TABLE" >> $LOG_FILE
+    echo "$DATE: Backup completed for $DB.$TABLE" >> $LOG_FILE
     ;;
   archive)
+
     tar czf "$ARCHIVE_DIR/${DATE}_backup.tar.gz" -C "$BACKUP_DIR" .
     echo "$DATE: Archive created" >> $LOG_FILE
+
+
     rm -f "$BACKUP_DIR"/*.sql
+    # Keep only the latest 3 archives, delete older ones
     ls -t "$ARCHIVE_DIR"/*.tar.gz | sed -e '1,3d' | xargs -r rm --
     ;;
   list)
+
+    # List all archive files with their date and size
     echo -e "Date\t\tSize"
     ls -lh $ARCHIVE_DIR | grep '.tar.gz' | awk '{print $6, $7, $9}'
     ;;
   *)
+
+    # Print usage if an invalid command is provided
     echo "Usage: dbbackup {db <name> | table <name> | backup | archive | list}"
     ;;
 esac
