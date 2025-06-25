@@ -13,7 +13,7 @@ A MySQL database (serpent_surge_db) was created with a scores table containing p
 Git Setup and Repository Management (Task 3):
 The project was pushed to a private GitHub repository, with a well-structured directory layout to include components for Ansible, Docker, and Terraform. A descriptive README was also included for project documentation.
 
-###Installation and Setup - Prerequisites
+### Installation and Setup - Prerequisites
 
 1. Docker
 2. Docker Compose
