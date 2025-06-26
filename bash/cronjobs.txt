@@ -1,2 +1,1 @@
-0 2 * * * /usr/local/bin/dbbackup backup
 0 3 */3 * * /usr/local/bin/dbbackup archive
