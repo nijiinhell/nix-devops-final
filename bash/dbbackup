@@ -10,11 +10,11 @@ DATE=$(date +"%Y-%m-%d_%H-%M")
 # Main case block to handle different operations
 case $1 in
   db) 
-    DB="$2"  # Set the database if provided
+    DB="$2"  
     echo "Using database: $DB"
     ;;
   table)
-    TABLE="$2"  # Set the table if provided
+    TABLE="$2"  
     echo "Using table: $TABLE"
     ;;
   backup)
@@ -40,7 +40,6 @@ case $1 in
     ;;
   *)
 
-    # Print usage if an invalid command is provided
     echo "Usage: dbbackup {db <name> | table <name> | backup | archive | list}"
     ;;
 esac
